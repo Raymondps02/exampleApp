@@ -49,6 +49,11 @@
                                         <span class="custom-control-label">{{ __('Remember me') }}</span>
                                     </label>
                                 </div>
+                                <div class="form-group required">
+                                    <strong>Google recaptcha :</strong>
+                                    {!! NoCaptcha::renderJs() !!}
+                                    {!! NoCaptcha::display() !!}
+                                </div>
                                 <div class="form-group pt-1">
                                     <x-primary-button class="btn btn-primary btn-block">
                                         {{ __('Log in') }}
