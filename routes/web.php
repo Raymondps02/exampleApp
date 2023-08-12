@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\adminController;
+use App\Http\Controllers\produkController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +29,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
+// Route::get('/admin', function () {
+//     return view('admin.index');
+// })->middleware(['auth', 'verified'])->name('admin');
+
+Route::resource('admin', adminController::class);
+Route::resource('produk', produkController::class);
+Route::resource('dashboard', adminController::class);
+//Route::get('/adminPage', [adminController::class, 'crud'])->name('adminPage.crud');
+//Route::get('admin', 'admin\adminController@index');
 require __DIR__.'/auth.php';
