@@ -58,9 +58,9 @@
             display: block;
         }
         
-        #sidebar .list-unstyled li a:hover {
+        /* #sidebar .list-unstyled li a:hover {
             background-color: #555;
-        }
+        } */
         
         #sidebar .collapse {
             display: none;
@@ -70,6 +70,14 @@
             padding: 10px;
             color: #fff;
             background-color: #444;
+        }
+        /* Style for active menu item */
+        #sidebar .list-unstyled li.active {
+            background-color: #007bff; /* Blue color for active menu item */
+        }
+
+        #sidebar .list-unstyled li.active a {
+            color: #fff; /* Set text color to white for active menu item */
         }
         .content { 
             margin-left: 200px; /* Ganti 250px dengan lebar sidebar yang sesuai */

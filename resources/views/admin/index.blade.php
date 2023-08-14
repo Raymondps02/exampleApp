@@ -43,18 +43,23 @@
                             <button class="btn btn-secondary" type="submit">Cari</button>
                         </form>
                         </div>
-                        <!-- TOMBOL TAMBAH DATA -->
+
+                        {{-- @if (auth()->user()->hasRole('admin')||auth()->user()->hasRole('master')) --}}
+                            <!-- TOMBOL TAMBAH DATA -->
                         <div class="pb-3">
                         <a href='{{ url('admin/create') }}' class="btn btn-primary">+ Tambah Data</a>
                         </div>
+                        {{-- @endif --}}
+                        
                         <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th class="col-md-1">No</th>
-                                    <th class="col-md-2">Nama</th>
+                                    <th class="col-md-1">Nama</th>
                                     <th class="col-md-3">Email</th>
                                     <th class="col-md-2">Password</th>
                                     <th class="col-md-2">Phone Number</th>
+                                    <th class="col-md-1">Role</th>
                                     <th class="col-md-1">Aksi</th>
                                 </tr>
                             </thead>
@@ -67,6 +72,14 @@
                                     <td>{{ $item->email }}</td>
                                     <td>{{ $item->password }}</td>
                                     <td>{{ $item->phone_number }}</td>
+                                    <td>
+                                        {{-- {{ $user->role }} --}}
+                                        @if(!empty($item->getRoleNames()))
+                                            @foreach($item->getRoleNames() as $v)
+                                                <span class="badge rounded-pill bg-dark">{{ $v }}</span>
+                                            @endforeach
+                                        @endif
+                                    </td>
                                     <td>
                                         <a href='{{ url('admin/'.$item->email.'/edit') }}' class="btn btn-warning btn-sm">Edit</a>
                                         <form onsubmit="return confirm('Hapus Data?')" class="d-inline" action="{{ url('admin/'.$item->email) }}" method="post">
@@ -84,27 +97,15 @@
                         </table>
                         {{ $data->withQueryString()->links() }}
                     </div>
-                    {{-- <div class="p-6 text-gray-900">
-                        {{ __("You're logged in!") }}
-                    </div>
-                    <div class="p-6">
-                        <x-primary-button class="btn btn-primary btn-block">
-                            <a href="{{ url('/admin') }}">
-                            {{ __('input data') }}
-                            </a>
-                        </x-primary-button>
-                    </div> --}}
                 </div>
             </div>
         </div>  
     </x-app-layout>
 </body>
-
-
-
-
-
 @extends('layouts.template')
+
+
+
             {{--@section('konten')
                 <!-- START DATA -->
                 <div class="my-3 p-3 bg-body rounded shadow-sm">

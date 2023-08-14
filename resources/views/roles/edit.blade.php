@@ -21,35 +21,34 @@
 
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <form action='{{ url('produk/'.$data->kode) }}' method='post'>
+                    <form action='{{ url('roles/') }}' method='post'>
                         @csrf
                         @method('PUT')
                         <div class="my-3 p-3 bg-body rounded shadow-sm">
-                            <a href='{{ url('produk') }}' class="btn btn-secondary">Back</a>
+                            <a href='{{ url('roles') }}' class="btn btn-secondary">Back</a>
+
+                            {!! Form::model($role, ['method' => 'PATCH','route' => ['roles.update', $role->id]]) !!}
+
                             <div class="mb-3 row">
-                                <label for="kode" class="col-sm-2 col-form-label">Kode</label>
+                                <label for="permission" class="col-sm-2 col-form-label">Permission</label>
                                 <div class="col-sm-10">
-                                    {{ $data->kode }}
+                                    {{-- <input type="text" class="form-control" name='permission' value="{{ $role->permission }}" id="permission"> --}}
+                                    {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="nama" class="col-sm-2 col-form-label">Nama</label>
+                                <label for="" class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name='nama' value="{{ $data->nama }}" id="nama">
+                                    @foreach($permission as $value)
+                                        <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
+                                        {{ $value->name }}</label>
+                                    <br/>
+                                    @endforeach
                                 </div>
                             </div>
-                            <div class="mb-3 row">
-                                <label for="keterangan" class="col-sm-2 col-form-label">Keterangan</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name='keterangan' value="{{ $data->keterangan }}" id="keterangan">
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="harga" class="col-sm-2 col-form-label">Harga</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" name='harga' value="{{ $data->harga }}" id="harga">
-                                </div>
-                            </div>
+                            
+                            
+                            
                             <div class="mb-3 row">
                                 <label for="harga" class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-10"><button type="submit" class="btn btn-primary" name="submit" style="background-color: rgb(0, 95, 255)">SIMPAN</button></div>
