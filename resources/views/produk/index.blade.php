@@ -70,7 +70,7 @@
                                     <td>{{ $item->keterangan }}</td>
                                     <td>{{ $item->harga }}</td>
                                     <td>
-                                        @can('product-create')
+                                        @can('product-edit')
                                         <a href='{{ url('produk/'.$item->kode.'/edit') }}' class="btn btn-warning btn-sm">Edit</a>
                                         @endcan
                                         @can('product-delete')

@@ -15,7 +15,6 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            'role-list',
             'role-create',
             'role-edit',
             'role-delete',
@@ -27,6 +26,7 @@ class RolePermissionSeeder extends Seeder
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);
         }
+
         // Permission::create(['name'=>'add-user']);
         // Permission::create(['name'=>'edit-user']);
         // Permission::create(['name'=>'add-product']);

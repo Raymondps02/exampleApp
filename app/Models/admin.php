@@ -24,6 +24,7 @@ class admin extends Model
     protected $hidden = [
         'password',
     ];
+    protected $guard_name = 'web';
 
     
 }

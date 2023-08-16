@@ -70,8 +70,10 @@
                                             <a class="btn btn-primary" href="{{ route('roles.edit',$role->id) }}">Edit</a>
                                         @endcan
                                         @can('role-delete')
+                                        {{-- <form onsubmit="return confirm('Hapus Data?')" class="d-inline" action="{{ url('produk/'.$item->kode) }}" method="post"> --}}
+                                        {{-- </form> --}}
                                             {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline']) !!}
-                                                {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+                                                {!! Form::submit('Delete', ['class' => 'btn btn-danger'],"return confirm('Hapus Data?')") !!}
                                             {!! Form::close() !!}
                                         @endcan
                                     </td>

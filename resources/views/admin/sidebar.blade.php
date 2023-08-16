@@ -8,13 +8,20 @@
     <span class="heading">Main</span>
     <br><br>
     <ul class="list-unstyled">
-        <li class="@if(Request::is('admin')) active @endif"><a href="{{ url('admin') }}"> <i class="icon-home"></i>Admin </a></li>
+        @if (auth()->user()->hasRole('master'))
+            <li class="@if(Request::is('admin')) active @endif"><a href="{{ url('admin') }}"> <i class="icon-home"></i>Admin </a></li>
+        @endif
+        
         <li class="@if(Request::is('produk')) active @endif"><a href="{{ url('produk') }}"> <i class="icon-grid"></i>Produk </a></li>
-        <li class="@if(Request::is('roles')) active @endif"><a href="{{ url('roles') }}"> <i class="fa fa-bar-chart"></i>Role </a></li>
-        <li><a href="admin"> <i class="icon-padnote"></i>Home3 </a></li>
+        
+        @if (auth()->user()->can('role-create') || auth()->user()->can('role-edit') || auth()->user()->can('role-delete'))
+            <li class="@if(Request::is('roles')) active @endif"><a href="{{ url('roles') }}"> <i class="fa fa-bar-chart"></i>Role </a></li>
+        @endif
+
+        <li><a href="#"> <i class="icon-padnote"></i> -- </a></li>
         <li>
             <a href="#examp" aria-expanded="false" data-toggle="collapse">
-                <i class="icon-windows"></i>Home4
+                <i class="icon-windows"></i>--
                 
             </a>
             <ul id="example" class="collapse list-unstyled">
@@ -25,6 +32,6 @@
         </li>
         {{-- <li class="@if(Request::is('admin')) active @endif"><a href="admin">Dashboard</a></li>
         <li class="@if(Request::is('produk')) active @endif"><a href="users">Users</a></li> --}}
-        <li><a href="login.html"> <i class="icon-logout"></i>Home5</a></li>
+        <li><a href="#"> <i class="icon-logout"></i>--</a></li>
     </ul>
 </nav>

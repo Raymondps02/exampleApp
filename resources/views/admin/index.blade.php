@@ -56,11 +56,11 @@
                                 <tr>
                                     <th class="col-md-1">No</th>
                                     <th class="col-md-1">Nama</th>
-                                    <th class="col-md-3">Email</th>
-                                    <th class="col-md-2">Password</th>
-                                    <th class="col-md-2">Phone Number</th>
+                                    <th class="col-md-2">Email</th>
+                                    <th class="col-md-1">Password</th>
+                                    <th class="col-md-3">Phone Number</th>
                                     <th class="col-md-1">Role</th>
-                                    <th class="col-md-1">Aksi</th>
+                                    <th class="col-md-2">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>

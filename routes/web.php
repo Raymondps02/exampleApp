@@ -42,6 +42,5 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', roleController::class);
 });
 Route::resource('dashboard', adminController::class);
-//Route::get('/adminPage', [adminController::class, 'crud'])->name('adminPage.crud');
-//Route::get('admin', 'admin\adminController@index');
+
 require __DIR__.'/auth.php';

@@ -21,10 +21,10 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 @include('components.pesan')
 
-                    <form action='{{ url('admin/'.$data->email) }}' method='post'>
-                    {{-- {!! Form::model($user, ['method' => 'PATCH','route' => ['admin.update', $user->id]]) !!} --}}
+                    {{-- <form action='{{ url('admin/'.$data->email) }}' method='post'>
                     @csrf
-                    @method('PUT')
+                    @method('PUT') --}}
+                    {!! Form::model($user, ['method' => 'PATCH','route' => ['admin.update', $user->id]]) !!}
                     <div class="my-3 p-3 bg-body rounded shadow-sm">
                         <a href='{{ url('admin') }}' class="btn btn-secondary">Back</a>
                         <div class="mb-3 row">
@@ -36,7 +36,7 @@
                         <div class="mb-3 row">
                             <label for="email" class="col-sm-2 col-form-label">Email</label>
                             <div class="col-sm-10">
-                                {{ $data->email }}
+                                <input type="text" class="form-control" name='email' value="{{ $data->email }}" id="email">
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -62,7 +62,7 @@
                             <div class="col-sm-10"><button type="submit" class="btn btn-primary" name="submit" style="background-color: rgb(0, 95, 255)">SIMPAN</button></div>
                         </div>
                     </div>
-                </form>
+                {{-- </form> --}}
             </div>
         </div>
     </div>
