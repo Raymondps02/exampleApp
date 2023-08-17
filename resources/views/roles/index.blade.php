@@ -38,49 +38,43 @@
                     <div class="my-3 p-3 bg-body rounded shadow-sm">
                         <!-- FORM PENCARIAN -->
                         <div class="pb-3">
-                        <form class="d-flex" action="{{ url('produk') }}" method="get">
+                        <form class="d-flex" action="{{ url('roles') }}" method="get">
                             <input class="form-control me-1" type="search" name="katakunci" value="{{ Request::get('katakunci') }}" placeholder="Masukkan kata kunci" aria-label="Search">
                             <button class="btn btn-secondary" type="submit">Cari</button>
                         </form>
                         </div>
                         <!-- TOMBOL TAMBAH DATA -->
                         <div class="pb-3">
-                        @can('product-create') 
-                        <a href='{{ url('produk/create') }}' class="btn btn-primary">+ Tambah Data</a>
-                        @endcan
+                            @can('role-create')
+                            <a href='{{ url('roles/create') }}' class="btn btn-primary">+ Tambah Role</a>
+                            @endcan
                         </div>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th class="col-md-1">No</th>
-                                    <th class="col-md-2">Kode</th>
-                                    <th class="col-md-3">Nama</th>
-                                    <th class="col-md-2">Keterangan</th>
-                                    <th class="col-md-2">Harga</th>
+                                    <th class="col-md-2">Role</th>
                                     <th class="col-md-1">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $i = $data->firstItem()  ?>
-                                @foreach ($data as $item)
+                                <?php $i = $roles->firstItem()  ?>
+                                {{-- @foreach ($data as $item) --}}
+                                @foreach ($roles as $key => $role)
                                 <tr>
                                     <td>{{ $i }}</td>
-                                    <td>{{ $item->kode }}</td>
-                                    <td>{{ $item->nama }}</td>
-                                    <td>{{ $item->keterangan }}</td>
-                                    <td>{{ $item->harga }}</td>
+                                    <td>{{ $role->name }}</td>
                                     <td>
-                                        @can('product-edit')
-                                        <a href='{{ url('produk/'.$item->kode.'/edit') }}' class="btn btn-warning btn-sm">Edit</a>
+                                        {{-- <a class="btn btn-info" href="{{ route('roles.show',$role->id) }}">Show</a> --}}
+                                        @can('role-edit')
+                                            <a class="btn btn-primary" href="{{ route('roles.edit',$role->id) }}">Edit</a>
                                         @endcan
-                                        @can('product-delete')
-                                        <form onsubmit="return confirm('Hapus Data?')" class="d-inline" action="{{ url('produk/'.$item->kode) }}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" name="submit" class="btn btn-danger btn-sm">
-                                                Del
-                                            </button>
-                                        </form>
+                                        @can('role-delete')
+                                        {{-- <form onsubmit="return confirm('Hapus Data?')" class="d-inline" action="{{ url('produk/'.$item->kode) }}" method="post"> --}}
+                                        {{-- </form> --}}
+                                            {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline']) !!}
+                                                {!! Form::submit('Delete', ['class' => 'btn btn-danger'],"return confirm('Hapus Data?')") !!}
+                                            {!! Form::close() !!}
                                         @endcan
                                     </td>
                                 </tr>
@@ -88,7 +82,8 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $data->links() }}
+                        {{-- {{ $data->links() }} --}}
+                        {!! $roles->render() !!}
                     </div>
                     {{-- <div class="p-6 text-gray-900">
                         {{ __("You're logged in!") }}

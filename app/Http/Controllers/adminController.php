@@ -6,8 +6,15 @@ use App\Models\admin;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
 
 class adminController extends Controller
 {
@@ -17,14 +24,17 @@ class adminController extends Controller
     public function index(Request $request)
     {
         $katakunci = $request->katakunci;
+        
         $jumlahBaris = 5;
         if(strlen($katakunci)){
-            $data = admin::where('name','like',"%katakunci%")
-            ->orWhere('email','like',"%katakunci%")
-            ->orWhere('phone_number','like',"%katakunci%")
+            //$katakunci = $request->katakunci;
+            $data = admin::where('name','like',"%$katakunci%")
+            ->orWhere('email','like',"%$katakunci%")
+            ->orWhere('phone_number','like',"%$katakunci%")
             ->paginate($jumlahBaris);
         }else{
-            $data = admin::orderby('name','desc')->paginate($jumlahBaris);
+            //$data = admin::orderby('name','desc')->paginate($jumlahBaris);
+            $data = User::orderby('name','desc')->paginate($jumlahBaris);
         }
         
         return view('admin.index')->with('data',$data);
@@ -35,7 +45,8 @@ class adminController extends Controller
      */
     public function create()
     {
-        return view('admin.create');
+        $roles = Role::pluck('name','name')->all();
+        return view('admin.create',compact('roles'));
     }
 
     /**
@@ -48,21 +59,31 @@ class adminController extends Controller
         Session::flash('password',$request->password);
         Session::flash('phone_number',$request->phone_number);
 
-        $request->validate([
+        $this->validate($request,[
             'name' => 'required', 'string', 'max:255',
             'email' => 'required', 'string', 'email', 'max:255', 'unique:'.admin::class,
             'password' => 'required',
-            'phone_number' => 'required', 'numeric'
+            'phone_number' => 'required', 'numeric',
+            'roles' => 'required',
         ]);
         $data = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
-            'phone_number' => $request->phone_number
+            'phone_number' => $request->phone_number,
+
 
         ];
-        admin::create($data);
+        $input = $request->all();
+        $user = User::create($input);
+        //$user1 = admin::create($input);
+        //User::create($data);
+
+        
+        $user->assignRole($request->input('roles'));
+        //$user1->assignRole($request->input('roles'));
         //event(new Registered($data));
+
         return redirect()->to('admin')->with('success','berhasil tambah data');
     }
 
@@ -79,8 +100,16 @@ class adminController extends Controller
      */
     public function edit(string $id)
     {
-        $data = admin::where('email',$id)->first();
-        return view('admin.edit')->with('data',$data);
+        //$user = admin::where('email',$id)->first();
+        $user = User::where('email',$id)->first();
+        // $user = User::find($id);
+        // $roles = Role::pluck('name','name')->all();
+        // $userRole = $data->roles->pluck('name','name')->all();
+        //$user = admin::find($id);
+        $roles = Role::pluck('name','name')->all();
+        $userRole = $user->roles->pluck('name','name')->all();
+        // $userRole1 = $user->roles->pluck('name','name')->all();
+        return view('admin.edit',compact('user','roles','userRole'))->with('data',$user);
     }
 
     /**
@@ -88,21 +117,32 @@ class adminController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
+        $this->validate($request, [
             'name' => 'required', 'string', 'max:255',
-            //'email' => 'required', 'string', 'email', 'max:255', 'unique:'.admin::class,
+            'email' => 'required', 'string', 'email', 'max:255', 'unique:'.admin::class,
             'password' => 'required',
-            'phone_number' => 'required', 'numeric'
+            'phone_number' => 'required', 'numeric',
+            'roles' => 'required'
         ]);
-        $data = [
-            'name' => $request->name,
-            //'email' => $request->email,
-            'password' => $request->password,
-            'phone_number' => $request->phone_number
+        // $data = [
+        //     'name' => $request->name,
+        //     //'email' => $request->email,
+        //     'password' => $request->password,
+        //     'phone_number' => $request->phone_number,
+        //     'roles' => $request->roles,
 
-        ];
-        admin::where('email',$id)->update($data);
-        //event(new Registered($data));
+        // ];
+
+        $input = $request->all();
+        
+        //$user = admin::where('email',$id)->update($data);
+        //$user = admin::find($id);
+        $user = User::find($id);
+        $user->update($input);
+        // $user1->update($input);
+        DB::table('model_has_roles')->where('model_id',$id)->delete();
+        $user->assignRole($request->input('roles'));
+        // $user1->assignRole($request->input('roles'));
         return redirect()->to('admin')->with('success','berhasil update data');
     }
 
@@ -111,7 +151,8 @@ class adminController extends Controller
      */
     public function destroy(string $id)
     {
-        admin::where('email',$id)->delete();
+        //admin::where('email',$id)->delete();
+        User::where('email',$id)->delete();
         return redirect()->to('admin')->with('success','berhasil delete data');
     }
 }

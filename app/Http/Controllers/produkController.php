@@ -11,9 +11,28 @@ class produkController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    function __construct()
     {
-        $data = produk::orderby('kode','asc')->paginate(5);
+        $this->middleware('permission:product-list|product-create|product-edit|product-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:product-create', ['only' => ['create','store']]);
+        $this->middleware('permission:product-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:product-delete', ['only' => ['destroy']]);
+    }
+    public function index(Request $request)
+    {
+        $katakunci = $request->katakunci;
+        
+        $jumlahBaris = 5;
+        if(strlen($katakunci)){
+            //$katakunci = $request->katakunci;
+            $data = produk::where('kode','like',"%$katakunci%")
+            ->orWhere('nama','like',"%$katakunci%")
+            ->orWhere('keterangan','like',"%$katakunci%")
+            ->paginate($jumlahBaris);
+        }else{
+            $data = produk::orderby('kode','asc')->paginate($jumlahBaris);
+        }
         return view('produk.index')->with('data',$data);
     }
 

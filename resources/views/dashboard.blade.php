@@ -13,7 +13,7 @@
               </div>
               <div class="p-6">
                 <x-primary-button class="btn btn-primary btn-block">
-                  <a href="{{ url('/admin') }}">
+                  <a href="{{ url('/produk') }}">
                     {{ __('input data') }}
                   </a>
                 </x-primary-button>

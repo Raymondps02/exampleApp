@@ -4,6 +4,7 @@ use App\Http\Controllers\adminController;
 use App\Http\Controllers\produkController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\roleController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -35,10 +36,11 @@ Route::middleware('auth')->group(function () {
 // Route::get('/admin', function () {
 //     return view('admin.index');
 // })->middleware(['auth', 'verified'])->name('admin');
-
-Route::resource('admin', adminController::class);
-Route::resource('produk', produkController::class);
+Route::group(['middleware' => ['auth']], function() {
+    Route::resource('admin', adminController::class);
+    Route::resource('produk', produkController::class);
+    Route::resource('roles', roleController::class);
+});
 Route::resource('dashboard', adminController::class);
-//Route::get('/adminPage', [adminController::class, 'crud'])->name('adminPage.crud');
-//Route::get('admin', 'admin\adminController@index');
+
 require __DIR__.'/auth.php';
